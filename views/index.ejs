@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Task Management System</title>
+    <link rel="stylesheet" href="one.css" />
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -25,6 +26,9 @@
       ul {
         list-style-type: none;
         padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
       }
 
       li {
@@ -32,27 +36,63 @@
         padding: 10px;
         margin-bottom: 5px;
       }
+      .cat-111 {
+        background-color: rgba(0, 128, 0, 0.3);
+      }
+      .cat-222 {
+        background-color: rgba(0, 0, 255, 0.3);
+      }
+      .cat-333 {
+        background-color: rgba(255, 0, 0, 0.3);
+      }
     </style>
   </head>
   <body>
     <h1>Task Management System</h1>
     <div>
-      <h2>User Tasks</h2>
-      <ul id="taskList"></ul>
+      <h2>All Tasks</h2>
+      <ul id="taskList">
+        <% tasks.forEach(task=>{ %>
+        <!-- categories.find(cat=>cat.categoryid==task.categoryid).categoryname -->
+
+        <li class="<%='cat-'+task.categoryid%>">
+          <h3><%=task.title%></h3>
+          <p><%=task.description%></p>
+          <a
+            href="/update?id=<%=task.taskid%>&title=<%=task.title%>&description=<%=task.description%>"
+            >update</a
+          >
+          <a href="/user?id=<%=task.userid%>"> <%=task.username%> </a>
+        </li>
+        <% }) %>
+      </ul>
     </div>
     <div>
       <h2>Add New Task</h2>
-      <form id="taskForm">
+      <form id="taskForm" action="http://127.0.0.1:3000/new-task" method="post">
         <label for="title">Title:</label>
         <input type="text" id="title" name="title" required />
-
+        <!-- title: "go swiming" -->
         <label for="description">Description:</label>
         <textarea id="description" name="description" required></textarea>
-
+        <!-- description: "swimming competion eldoret club" -->
         <label for="dueDate">Due Date:</label>
         <input type="date" id="dueDate" name="dueDate" required />
+
         <label for="category">Category</label>
-        <select name="cateory" id="category"></select>
+        <select name="category" id="category">
+          <% categories.forEach(cat=>{ %>
+          <option value="<%=cat.categoryid%>"><%=cat.categoryname%></option>
+          <%})%>
+        </select>
+
+        <label for="user">Assign User: </label>
+        <select name="user" id="user">
+          <% users.forEach(user=>{ %>
+          <option value="<%=user.userid%>"><%=user.username%></option>
+          <% }) %>
+        </select>
+
         <button type="submit">Add Task</button>
       </form>
     </div>
